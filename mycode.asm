@@ -1,33 +1,88 @@
 .model small
 .stack 
 .data
-array db 100
-NumStr db 4,0,4 dup(0) 
+
+result db 16 dup('x'), 'b'
+msg1  db "supported values from -32768 to 65535", 0Dh,0Ah
+nsg2  db "enter the number: $"
+sum   dw 0  
+enter db 13,10,'$'
+temp  dw 0
+Avg   db 0
 .code
-start:
+
 mov ax,@data
 mov ds,ax
+xor ax,ax
 
-;push offset array
-call EnterNumber
-;loop input
-exit:
-        mov ah,4ch
-        int 21h
+
+start:
+; print the message1:
+mov dx, offset msg1
+mov ah, 9
+int 21h
+
+
+call scan_num ; get the number to cx. 
+mov temp,cx
+lea dx,enter
+mov ah,9
+int 21h
  
-proc EnterNumber
-        push bp
-        mov bp,sp
- 
-        lea dx,NumStr
-        mov ah,0ah
-        int 21h
- 
-        pop bp
-        ret ; maybe a change will be required
-        endp
-  
- scan_num        proc    near
+gradeLoop:
+    push cx
+    call scan_num
+    add sum,cx
+    pop cx 
+    lea dx,enter
+    mov ah,9
+    int 21h
+    loop gradeLoop 
+    
+    
+mov AX,sum
+mov DX,temp 
+div dx
+    
+
+
+
+
+
+
+mov bx, cx
+
+
+                                    
+;print_me:
+;	mov al, [si]
+;	int 10h 
+;	inc si
+
+
+
+
+; wait for any key....
+mov ah, 0
+int 16h 
+
+
+mov ah,4ch
+int 21h
+
+
+; this macro prints a char in al and advances the current cursor position:
+putc    macro   char
+        push    ax
+        mov     al, char
+        mov     ah, 0eh
+        int     10h     
+        pop     ax
+endm
+
+; this procedure gets the multi-digit signed number from the keyboard,
+; and stores the result in cx register:
+scan_num        proc    near
         push    dx
         push    ax
         push    si
@@ -139,4 +194,6 @@ not_minus:
 make_minus      db      ?       ; used as a flag.
 ten             dw      10      ; used as multiplier.
 scan_num        endp
+
+
 
