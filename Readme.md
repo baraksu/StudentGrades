@@ -14,7 +14,8 @@ C Calculate average.
   **מתכנת:** איתי גוטסדינר.<br/>
   **כיתה:** י 3.<br/>
   **שיעור:** מדעי המחשב. לומד על ידי ברק צוברי.<br/>
-  **בית ספר:** ישיבת בני עקיבא גבעת שמואל.<br/>
+  **בית ספר:** ישיבת בני עקיבא גבעת שמואל
+
   **שנת ההגשה:** 2023.<br/>
   
  
@@ -25,8 +26,16 @@ C Calculate average.
   ## איך זה עובד?
   `הוסף כאן דוגמאות של זמן ריצה, תמונות והסברים`
   ### דגימות זמן ריצה
-   
   
+  
+  ![Screenshot (23)](https://github.com/baraksu/StudentGrades/assets/126715953/bcda6f11-6a73-4648-900a-a2d490218c04)
+  
+  ![Screenshot (24)](https://github.com/baraksu/StudentGrades/assets/126715953/7cd92627-8352-40f8-9a45-bd6e9214d190)
+ 
+  ![Screenshot (25)](https://github.com/baraksu/StudentGrades/assets/126715953/958720b4-4848-437b-9e3c-34c1d8aa0ffd)
+  
+  ![Screenshot (26)](https://github.com/baraksu/StudentGrades/assets/126715953/74796f50-922e-4b5a-b49d-5e06d1c02319)
+
   
   
   ## כיצד להשתמש בתוכנית?
