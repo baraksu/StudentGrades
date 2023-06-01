@@ -5,6 +5,7 @@
 
 msg1  db "supported values from -32768 to 65535", 0Dh,0Ah ; the valid range
 nsg2  db "enter the number: $" ; asking for a number of grades
+msg3  db "enter the grade $"
 sum   dw 0 ; the sum of the grades together 
 enter db 13,10,'$'; dropping a line 
 temp  dw 0 ; to hold the number of grades so i can do an average with it
@@ -31,6 +32,12 @@ int 21h
  
 gradeLoop:
     push cx
+   
+    ; print the message3:
+    mov dx, offset msg3
+    mov ah, 9
+    int 21h
+    
     call scan_num
     add sum,cx
     pop cx 
