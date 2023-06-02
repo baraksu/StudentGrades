@@ -1,10 +1,12 @@
 .model small
 .stack 
 .data
-
-
+var2  db 41
+var1  db 40  
 msg1  db "supported values from -32768 to 65535", 0Dh,0Ah ; the valid range
-nsg2  db "enter the number: $" ; asking for a number of grades
+nsg2  db "enter the number of grades: $" ; asking for a number of grades
+msg3  db "enter the grade $" ; asking for the grades
+msg4  db " the avg is: $"    ; presenting the average
 sum   dw 0 ; the sum of the grades together 
 enter db 13,10,'$'; dropping a line 
 temp  dw 0 ; to hold the number of grades so i can do an average with it
@@ -28,9 +30,17 @@ mov temp,cx
 lea dx,enter
 mov ah,9
 int 21h
+
+
  
 gradeLoop:
     push cx
+    
+    ; print the message3:
+    mov dx, offset msg3
+    mov ah, 9
+    int 21h
+    
     call scan_num
     add sum,cx
     pop cx 
@@ -39,12 +49,24 @@ gradeLoop:
     int 21h
     loop gradeLoop 
     
-
+    
+    
 XOR DX,DX    
 mov AX,sum
 div temp
     
-
+; prints the average
+call print_ax 
+mov bx,dx
+mov dl,var1
+mov ah,02
+int 21h
+mov dx,bx
+mov ax,dx 
+call print_ax
+mov dl,var2
+mov ah,02
+int 21h
 
 mov bx, cx
 
@@ -181,6 +203,36 @@ not_minus:
         ret
 make_minus      db      ?       ; used as a flag.
 ten             dw      10      ; used as multiplier.
-scan_num        endp
+scan_num        endp 
+
+
+
+ print_ax proc   ; this procedure
+;prints ax from hex to dec
+cmp ax, 0
+jne print_ax_r
+push ax
+mov al, '0'
+mov ah, 0eh
+int 10h
+pop ax
+ret
+print_ax_r:
+pusha
+mov dx, 0
+cmp ax, 0
+je pn_done
+mov bx, 10
+div bx
+call print_ax_r
+mov ax, dx
+add al, 30h
+mov ah, 0eh
+int 10h
+jmp pn_done
+pn_done:
+popa
+ret
+endp print_ax
 
 
