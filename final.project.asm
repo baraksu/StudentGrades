@@ -2,20 +2,42 @@
 .stack 
 .data
 var2  db 41
-var1  db 40  
+var1  db 40 
+ 
+                                                                          
+LG db 13,10,'         _____ _             _            _    _____               ',13,10           
+ db '        / ____| |           | |          | |  / ____|             | |             ',13,10
+ db '       | (___ | |_ _   _  __| | ___ _ __ | |_| |  __ _ __ __ _  __| | ___  ___    ',13,10
+ db '        \___ \| __| | | |/ _` |/ _ \ '_ \| __| | |_ | '__/ _` |/ _` |/ _ \/ __|    ',13,10
+ db '        ____) | |_| |_| | (_| |  __/ | | | |_| |__| | | | (_| | (_| |  __/\__ \   ',13,10
+ db '       |_____/ \__|\__,_|\__,_|\___|_| |_|\__|\_____|_|  \__,_|\__,_|\___||___/   ',13,10, '$'
+                                                                         
+                                                                         
+                                                                         
+
 msg1  db "supported values from -32768 to 65535", 0Dh,0Ah ; the valid range
 nsg2  db "enter the number of grades: $" ; asking for a number of grades
 msg3  db "enter the grade $" ; asking for the grades
-msg4  db " the avg is: $"    ; presenting the average
+msg4  db " the avg is: $"    ; presenting the average 
+msg5  db  " invalid $"
 sum   dw 0 ; the sum of the grades together 
 enter db 13,10,'$'; dropping a line 
 temp  dw 0 ; to hold the number of grades so i can do an average with it
 Avg   db 0 ; average
 .code
 
+                                                                                                                                                          
 mov ax,@data
 mov ds,ax
 xor ax,ax
+
+lea dx,LG
+mov ah,09
+int 21h 
+
+ 
+TryAgain:
+    xor cx,cx
 
 
 start:
@@ -25,7 +47,9 @@ mov ah, 9
 int 21h
 
 
-call scan_num ; get the number to cx.(the code was taken from the examples im emu8086)(Tobin.asm) 
+
+
+call scan_num ; get the number to cx.(the code was taken from the examples im emu8086)(Tobin.asm)   
 mov temp,cx
 lea dx,enter
 mov ah,9
@@ -79,6 +103,9 @@ int 16h
 
 mov ah,4ch
 int 21h
+
+
+
 
 
 ; this macro prints a char in al and advances the current cursor position:
@@ -169,8 +196,14 @@ ok_digit:
         mov     ah, 0
         mov     dx, cx      ; backup, in case the result will be too big.
         add     cx, ax
-        jc      too_big2    ; jump if the number is too big.
-
+        jc      too_big2    ; jump if the number is too big. 
+        
+        
+        cmp  cx,'A'
+        je   TryAgain
+        cmp  cx,0
+        je   invalid
+        
         jmp     next_digit
 
 set_minus:
@@ -202,10 +235,18 @@ not_minus:
         pop     dx
         ret
 make_minus      db      ?       ; used as a flag.
-ten             dw      10      ; used as multiplier.
+ten             dw      10      ; used as multiplier. 
 scan_num        endp 
-
-
+ 
+invalid:
+    lea dx,enter
+    mov ah,9
+    int 21h 
+    lea dx,  msg5 
+    mov ah,09
+    int 21h
+    mov ah,4ch
+    int 21h    
 
  print_ax proc   ; this procedure
 ;prints ax from hex to dec
@@ -234,5 +275,4 @@ pn_done:
 popa
 ret
 endp print_ax
-
 
