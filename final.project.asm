@@ -139,9 +139,9 @@ next_digit:
         mov     ah, 0eh
         int     10h
 
-        ; check for minus:
+        ; check for minus: if minus then invalid
         cmp     al, '-'
-        je      set_minus
+        je   invalid
 
         ; check for enter key:
         cmp     al, 13  ; carriage return?
@@ -203,7 +203,7 @@ ok_digit:
         je   TryAgain
         cmp  cx,0
         je   invalid
-        
+                
         jmp     next_digit
 
 set_minus:
@@ -242,7 +242,7 @@ invalid:
     lea dx,enter
     mov ah,9
     int 21h 
-    lea dx,  msg5 
+    lea dx, msg5 
     mov ah,09
     int 21h
     mov ah,4ch
@@ -275,4 +275,3 @@ pn_done:
 popa
 ret
 endp print_ax
-
